@@ -19,7 +19,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-// TODO: completely rewrite :D
+// TODO: completely rewrite :D (move to OpenSearch XML)
 public class ZooqleSearchProvider implements MovieSearchProvider, TvSearchProvider {
   private final static String TAG = ZooqleSearchProvider.class.getSimpleName();
 
@@ -35,7 +35,7 @@ public class ZooqleSearchProvider implements MovieSearchProvider, TvSearchProvid
 
     try {
       url = String.format(Locale.getDefault(),
-          "https://zooqle.com/search?q=%s%%20category%%3A%s&s=ns&v=t&sd=d",
+          "https://zooqle.com/search?q=%s%%20category%%3A%s%%20%2Blang%3Aen&s=ns&v=t&sd=d",
           URLEncoder.encode(query, "UTF-8"), URLEncoder.encode(category, "UTF-8"));
     } catch (UnsupportedEncodingException e) {
       Log.e(TAG, "Failed to format URL", e);
