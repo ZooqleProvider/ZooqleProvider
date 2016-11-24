@@ -1,0 +1,20 @@
+if (System.getenv("ZOOQLE_KEY_ALIAS") != null
+    && System.getenv("ZOOQLE_KEY_PASSWORD") != null
+    && System.getenv("ZOOQLE_KEYSTORE_PASSWORD") != null
+    && file('../keystore.jks').exists()) {
+  android {
+    signingConfigs {
+      releaseSigningConfig {
+        keyAlias System.getenv("ZOOQLE_KEY_ALIAS")
+        keyPassword System.getenv("ZOOQLE_KEY_PASSWORD")
+        storeFile file('../keystore.jks')
+        storePassword System.getenv("ZOOQLE_KEYSTORE_PASSWORD")
+      }
+    }
+    buildTypes {
+      release {
+        signingConfig signingConfigs.releaseSigningConfig
+      }
+    }
+  }
+}

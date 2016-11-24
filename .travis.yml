@@ -1,0 +1,48 @@
+language: android
+
+sudo: false
+
+jdk: oraclejdk8
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+env:
+  global:
+    - GRADLE_OPTS="-Xmx2048m -Xms512m"
+    - APK_FILENAME=ZooqleProvider-$TRAVIS_TAG.apk
+
+android:
+  components:
+    - platform-tools
+    - tools
+    - build-tools-25.0.0
+    - android-25
+    - extra-android-m2repository
+
+before_install:
+  - 'openssl aes-256-cbc -K $encrypted_43e00ff8877d_key -iv $encrypted_43e00ff8877d_iv -in keystore.jks.enc -out keystore.jks -d'
+
+script: ./gradlew build
+
+before_deploy:
+  - cd app/build/outputs/apk; mv app-release.apk $APK_FILENAME; ls -la; md5sum $APK_FILENAME > md5sum.txt; sha1sum $APK_FILENAME > sha1sum.txt; cd -
+
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: AltBc0oVnqdqztn0DQqDyXp0XZ1DJKALPZ9H0aDl75qwNibFfmIkEeHPb0PSn1VXpQ/vvjbqc2/aJjyjRXclBMTtrQM9gaf3sAWFhxNbLGBtoSKlvlhDLGi2f1jwDThsUjsckT9+Z57zfPcL5Zb58XKP4EwAEV7zEtZLlKSexkbmmWaIB4RoiSKO0ou8Up99VxF//NfMz4uB8PVYYHVTgjcCK2brU7/zRgEmCQblPl+J7KfGtw8gD1NOx/L9oNCYF0BuWgxEh+a3/C1GxLWis0KXjlVlJGcP2rOtMApTB008AUYtp2fYy5DuKsOPCCJje7W6fFf0JYWwKRIlzOuTxJKEPNBRSubgcuX4Z++KHgGsgGvzk7MeSFpiWldQCZquOFhfxlwEmeujo7LSeNdb9g9vOdW3G+EJDB6HjYw6RrIGx2zosw62bptmc5dRNKcLaKWQkxwA/eAN6qs+YokYN65a8equgF/CB/YrD5mcWIGErjwsQ7bmpxrCBkPIv6MauP9k6O1nlRyrmpLP2HsRN6HgI/faUUTpzgrgHy0nrguV2i7moZcyvL6MPaRit0y5GF3K4WALGrr7id5dWx5z625ahyIxaxZ0YuNYrZkQb3Tt01uPxzylhvqoI/ByGz3o9fI+kTRa1e/6HtG+Xn0Echvca9UPkL7LHrlIrnpJaqo=
+  file:
+    - app/build/outputs/apk/$APK_FILENAME
+    - app/build/outputs/apk/md5sum.txt
+    - app/build/outputs/apk/sha1sum.txt
+  on:
+    repo: ZooqleProvider/ZooqleProvider
+    tags: true
