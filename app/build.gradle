@@ -10,7 +10,7 @@ try {
 
 def versionMajor = 0
 def versionMinor = 9
-def versionPatch = 0
+def versionPatch = 1
 
 repositories {
   maven { url "https://jitpack.io" }
